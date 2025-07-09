@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+import math
+
 Candidate = namedtuple("Candidate", ["a", "b", "previous"])
 EqClass = namedtuple("EqClass", ["serial", "last"])
 Line = namedtuple("Line", ["serial", "hash"])
@@ -28,11 +30,17 @@ def LCS(seq_a, seq_b):
     # 4.
     P = [0] * (m + 1)
     for i in range(1, m+1):
-        # TODO: binary search
         hi = H(seq_a[i-1])
-        for j in range(1, n+1):
-            if hi == V[j].hash:
-                break
+        L = 1
+        R = n+1
+        while L < R:
+            mid = L + math.floor((R - L) / 2)
+            if V[mid].hash < hi:
+                L = mid + 1
+            else:
+                R = mid
+        if L < n+1 and V[L].hash == hi:
+            j = L
         else:
             j = 0
         P[i] = j
@@ -46,7 +54,37 @@ def LCS(seq_a, seq_b):
     # 6.
     for i in range(1, m+1):
         if P[i]:
-            k = merge(K, k, i, E, P[i])
+            r = 0
+            c = K[0]
+            p = P[i]
+            while True:
+                j = E[p].serial
+                L = r
+                R = k+2
+                while L < R:
+                    mid = L + math.floor((R - L) / 2)
+                    if K[mid].b < j:
+                        L = mid + 1
+                    else:
+                        R = mid
+                if L < k+2 and L > r and K[L].b > j:
+                    s = L - 1
+                    tmp = K[s]
+                    K[r] = c
+                    r = s + 1
+                    c = Candidate(i, j, tmp)
+                    if s == k:
+                        K[k+2] = K[k+1]
+                        k += 1
+
+                        K[r] = c
+                        break
+
+                if E[p].last:
+                    break
+                p += 1
+
+            K[r] = c
 
     # 7.
     J = [0] * (m + 1)
@@ -58,29 +96,3 @@ def LCS(seq_a, seq_b):
         c = c.previous
 
     return [seq_a[i-1] for i in range(1, m+1) if J[i]]
-
-def merge(K, k, i, E, p):
-    r = 0
-    c = K[0]
-    while True:
-        j = E[p].serial
-        # TODO: binary search
-        for s in range(r, k+1):
-            if K[s].b < j and K[s+1].b > j:
-                tmp = K[s]
-                K[r] = c
-                r = s + 1
-                c = Candidate(i, j, tmp)
-                if s == k:
-                    K[k+2] = K[k+1]
-                    k += 1
-
-                    K[r] = c
-                    return k
-
-        if E[p].last:
-            break
-        p += 1
-
-    K[r] = c
-    return k

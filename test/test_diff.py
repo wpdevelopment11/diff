@@ -2,7 +2,7 @@ from collections import namedtuple
 
 import unittest
 
-import diff
+from diff import diff
 
 class TestLCS(unittest.TestCase):
     def test_LCSTable(self):

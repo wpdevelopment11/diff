@@ -9,28 +9,26 @@ Line = namedtuple("Line", ["serial", "hash"])
 def LCS(seq_a, seq_b):
     m = len(seq_a)
     n = len(seq_b)
-    H = lambda x: x
 
     # 1.
     V = [0] * (n + 1)
     for j in range(1, n+1):
-        V[j] = (Line(j, H(seq_b[j-1])))
+        V[j] = (Line(j, seq_b[j-1]))
     V[0] = ()
 
     # 2.
     V.sort(key=lambda t: (t.hash, t.serial) if t else t)
 
     # 3.
-    f = lambda j: j == n or V[j].hash != V[j+1].hash
     E = [0] * (n + 1)
     for j in range(1, n+1):
-        E[j] = EqClass(V[j].serial, f(j))
+        E[j] = EqClass(V[j].serial, j == n or V[j].hash != V[j+1].hash)
     E[0] = EqClass(0, True)
 
     # 4.
     P = [0] * (m + 1)
     for i in range(1, m+1):
-        hi = H(seq_a[i-1])
+        hi = seq_a[i-1]
         L = 1
         R = n+1
         while L < R:

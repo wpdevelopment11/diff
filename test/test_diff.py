@@ -4,6 +4,7 @@ import unittest
 
 from diff import diff
 from diff import diff_hm
+from diff.diff_format import Add, Delete, Replace, get_hunks
 
 class TestLCS(unittest.TestCase):
     def test_LCSTable(self):
@@ -82,3 +83,13 @@ class TestLCS(unittest.TestCase):
 
         self.assertEqual(diff.LCS(textA, textB), result)
         self.assertEqual(diff_hm.LCS(textA, textB), result)
+
+class TestDiff(unittest.TestCase):
+    def test_get_hunks(self):
+        expected = [
+            Add(apos=0, blines=1),
+            Replace(alines=(3, 4), blines=(4, 6)),
+            Delete(alines=(6, 7), bpos=7)
+        ]
+        self.assertEqual(get_hunks(
+            diff_hm.LCS("abcdefg", "wabxyze"), "abcdefg", "wabxyze"), expected)

@@ -1,3 +1,8 @@
+"""Implementation of the Hunt-McIlroy diff algorithm.
+
+See: https://www.cs.dartmouth.edu/~doug/diff.pdf
+"""
+
 from collections import namedtuple
 
 import math

@@ -1,4 +1,8 @@
-# See: https://en.wikipedia.org/wiki/Longest_common_subsequence
+"""Implementation of the simple LCS algorithm from Wikipedia.
+
+See: https://en.wikipedia.org/wiki/Longest_common_subsequence
+"""
+
 def LCSTable(seq_a, seq_b):
     rows, cols = len(seq_a)+1, len(seq_b)+1
     table = [[0 for _ in range(cols)] for _ in range(rows)]

@@ -1,5 +1,9 @@
 # Implementation of the Hunt-McIlroy algorithm and the diff command-line utility
 
+<p align="center">
+    <img src="image.png" alt="diagram that shows how the diff utility works" />
+</p>
+
 ## Command-line utilities
 
 ### diff-cli.py - Print the diff of the two files or strings
